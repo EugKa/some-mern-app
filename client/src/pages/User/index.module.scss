@@ -1,0 +1,14 @@
+@import "../../styles/mixins.scss";
+
+
+.userPage {
+   padding: 10px;
+}
+
+.formWrapper {
+   @include Wrapper
+}
+
+.formInut {
+   @include Input
+}

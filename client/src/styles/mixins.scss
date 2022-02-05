@@ -1,0 +1,8 @@
+@mixin Input {
+   margin-top: 15px !important;
+}
+
+@mixin Wrapper {
+   display: flex;
+   flex-direction: column;
+}

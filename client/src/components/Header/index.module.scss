@@ -1,0 +1,32 @@
+.header {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(87, 192, 183);
+}
+
+.wrapper {
+  display: flex;
+}
+
+.link {
+  text-decoration: none;
+  margin: 0 10px;
+  
+}
+
+.btn {
+  background: none;
+  cursor: pointer;
+  border: 1px solid black;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+  margin: 0 10px;
+}
+
+.htag {
+  border: 1px solid black;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+}
+ 
