@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../..';
-import { ICreateUserFormState, AuthResponse } from '../../../interfaces';
+import { ICreateUserFormState, AuthResponse, IUser } from '../../../interfaces';
 import { authLogIn, authLogOut, authRegistration } from '../../../services';
 
 export interface UserState {
-  userData: any
+  userData: any | IUser,
   isAuth: boolean;
   status: 'idle' | 'loading' | 'success' | 'failed';
 }
@@ -52,7 +52,7 @@ export const logoutAsyncAction = createAsyncThunk(
     try {
       await authLogOut();
       localStorage.removeItem('token')
-      return null;
+      return {};
     } catch (e) {
       console.log(e); 
     }  
@@ -63,7 +63,7 @@ export const checkAuthAsyncAction = createAsyncThunk(
   'user-data/checkAuthAsyncAction',
   async () => {
     try {
-      const response = await axios.get<AuthResponse>(`http://localhost:7000/api/user/refresh`, { withCredentials: true});
+      const response = await axios.get<AuthResponse>(`${process.env.REACT_APP_API_URL}/user/refresh`, { withCredentials: true });
       console.log('checkAuthAsyncAction', response);
       localStorage.setItem('token', response.data.accessToken)
       return response.data.user;

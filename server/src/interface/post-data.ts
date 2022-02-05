@@ -3,5 +3,6 @@ import { Types } from "mongoose";
 export interface IPostData {
    title: string;
    description: string;
-   createdAt: Date
+   // createdAt: Date
+   owner: Types.ObjectId
 }

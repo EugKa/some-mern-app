@@ -6,5 +6,4 @@ export interface IUser {
    password: string;
    isActivated: boolean;
    activationLink: string;
-   // posts: IPostData[]
 }

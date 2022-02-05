@@ -3,12 +3,12 @@ import { AuthResponse } from "../interfaces";
 
 const api = axios.create({
   withCredentials: true,
-  baseURL: process.env.REACT_APP_API_URL_USER
+  baseURL: process.env.REACT_APP_API_URL
 })
 
 api.interceptors.request.use(async (config: AxiosRequestConfig) => {
   if (config.headers === undefined) {
-   config.headers = {};
+    config.headers = {};
   }
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
   return config;
@@ -21,11 +21,11 @@ api.interceptors.response.use((config) => {
   if (error.response.status === 401 && error.config && !error.config._isRetry) {
       originalRequest._isRetry = true;
       try {
-          const response = await axios.get<AuthResponse>(`${process.env.REACT_APP_API_URL_USER}/refresh`, {withCredentials: true})
-          localStorage.setItem('token', response.data.accessToken);
-          return api.request(originalRequest);
+        const response = await axios.get<AuthResponse>(`${process.env.REACT_APP_API_URL_USER}/refresh`, {withCredentials: true})
+        localStorage.setItem('token', response.data.accessToken);
+        return api.request(originalRequest);
       } catch (e) {
-          console.log('User has not authorized')
+        console.log('User has not authorized')
       }
   }
   throw error;

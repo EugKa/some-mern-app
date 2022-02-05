@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { selectUser } from '../../store/features/user/userSlice';
-import { useAppSelector } from '../../store/hooks';
-import { CircularProgress, Box, Card, Button } from '@mui/material/';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { CircularProgress, Box, Button, Grid } from '@mui/material/';
 import styles from './index.module.scss'
-import { CustomInput, UserInfo } from '../../components';
+import { CustomInput, PostItem, UserInfo } from '../../components';
 import { useForm } from 'react-hook-form';
-import { ICreatePostFormState } from '../../interfaces';
+import { ICreatePostFormState, IPost } from '../../interfaces';
+import { createPostAsyncAction, getUserPostsAsyncAction, selectPosts } from '../../store/features/posts/postsSlice';
+import { isIterationStatement } from 'typescript';
 
 
 export const User = () => {
    const user = useAppSelector(selectUser);
+   const { userPosts } = useAppSelector(selectPosts);
+
+   const dispatch = useAppDispatch();
    const { userData, status } = user;
 
    const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreatePostFormState>();
    const onSubmit = (formData: ICreatePostFormState) => {
       const { title, description } = formData;
-      console.log('formData', formData);
+      console.log('CREATE POST FORM', formData, userData.id);
+      dispatch(createPostAsyncAction({owner: userData.id, title, description}))
       reset();
-    }
+   }
+
+   useEffect(() => {
+      dispatch(getUserPostsAsyncAction(userData.id))
+   }, [dispatch, userData.id])
 
    if(status === 'loading') {
       return (
@@ -29,7 +39,7 @@ export const User = () => {
 
    return <div className={styles.userPage}>
       <UserInfo/>
-      <Card>
+      <div className={styles.card}>
          <form onSubmit={handleSubmit(onSubmit)}>
          <div className={styles.formWrapper}>
             <CustomInput
@@ -49,6 +59,11 @@ export const User = () => {
             </Button>
          </div>
          </form>
-      </Card>
+      </div>
+      <Grid container>
+         {userPosts.map((item: IPost) => {
+            return <PostItem post={item} key={item._id}/>
+         })}
+      </Grid>
    </div>;
 };

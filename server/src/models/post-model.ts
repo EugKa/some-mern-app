@@ -6,7 +6,7 @@ import validator from 'validator';
 const PostSchema = new Schema<IPostData>({
    title: {type: String, required: true},
    description: {type: String, required: true},
-   createdAt: { type: Date, required: true}
+   owner: { type: Schema.Types.ObjectId, ref: 'User' },   
 })
 
 export const postModel = model("Post", PostSchema)
