@@ -8,8 +8,8 @@ const routes = Router();
 routes.post('/create', authMiddleware, postController.create);
 routes.get('/getAll', postController.getAll);
 routes.get('/getUserPosts/:id',authMiddleware, postController.getUserPosts);
-routes.delete('/delete', authMiddleware);
-routes.put('/update', authMiddleware);
+routes.delete('/delete/:id', authMiddleware, postController.deletePost);
+routes.put('/update/:id', authMiddleware);
 
 
 export default routes

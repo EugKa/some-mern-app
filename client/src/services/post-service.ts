@@ -13,3 +13,8 @@ export async function getAllPostsService() {
 export async function getUserPostsService(id: string): Promise<AxiosResponse<IPost[]>> {
    return api.get<IPost[]>(`/post/getUserPosts/${id}`)
 }
+
+export async function deletePostService(id: string): Promise<AxiosResponse<IPost['_id']>> {
+   return api.delete<IPost['_id']>(`/post/delete/${id}`)
+}
+

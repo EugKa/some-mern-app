@@ -10,10 +10,10 @@ export const UserInfo = () => {
       <Card>
          <CardContent>
             <Typography variant="body2">
-               User name: {userData.userName}
+               User name: {userData?.userName}
             </Typography>
             <Typography variant="body2">
-               Email: {userData.email}
+               Email: {userData?.email}
             </Typography>
             <Typography variant="body2">
                Posts count: 1

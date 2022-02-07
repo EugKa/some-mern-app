@@ -18,9 +18,7 @@ class UserService implements IUserService {
 
       const user = await userModel.create({ userName, email, password: hashPassword, activationLink });
       await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
-      console.log('userCREATE', user);
       const userDto = new UserDto(user);
-      console.log('userDto', userDto);
       const tokens = tokenService.generateTokens({...userDto});
       await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -42,7 +40,7 @@ class UserService implements IUserService {
       }
       const isPassEquals = await bcrypt.compare(password, user.password)
       if(!isPassEquals) {
-            throw ApiError.BadRequest('Incorrect password')
+         throw ApiError.BadRequest('Incorrect password')
       }
 
       const userDto = new UserDto(user)

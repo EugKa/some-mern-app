@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../..';
 import {  IPost } from '../../../interfaces';
-import { getAllPostsService, createPostService, getUserPostsService } from '../../../services';
+import { getAllPostsService, createPostService, getUserPostsService, deletePostService } from '../../../services';
 
 export interface PostState {
-  posts: IPost[] | any,
-  userPosts: IPost[] | any
+  posts: IPost[] | any;
+  userPosts: IPost[] | any;
   status: 'idle' | 'loading' | 'success' | 'failed';
 }
 
@@ -21,7 +21,6 @@ export const createPostAsyncAction = createAsyncThunk(
   async (post: any) => {
     try {
       const { owner, title, description } = post;
-      console.log('post', post);
       const response = await createPostService(owner, title, description)
       console.log('CR-POST RES ', response);
       return response.data;
@@ -57,6 +56,18 @@ export const getUserPostsAsyncAction = createAsyncThunk(
   }
 );
 
+export const deletePostAsyncAction = createAsyncThunk(
+  'posts-data/deletePostAsyncAction',
+  async (id: string) => {
+    try {
+      const response = await deletePostService(id)
+      console.log('deletePostAsyncAction', response);
+      return response.data;
+    } catch (e) {
+      console.log(e); 
+    }  
+  }
+);
 
 
 export const postSlice = createSlice({
@@ -97,6 +108,17 @@ export const postSlice = createSlice({
         state.userPosts = action.payload
       })
       .addCase(getUserPostsAsyncAction.rejected, (state) => {
+        state.status = 'failed';
+      })
+
+      .addCase(deletePostAsyncAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deletePostAsyncAction.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.posts = state.posts.filter((item: IPost) => item._id !== action.payload)
+      })
+      .addCase(deletePostAsyncAction.rejected, (state) => {
         state.status = 'failed';
       })
   },

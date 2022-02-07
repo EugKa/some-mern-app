@@ -6,28 +6,39 @@ import styles from './index.module.scss'
 import { CustomInput, PostItem, UserInfo } from '../../components';
 import { useForm } from 'react-hook-form';
 import { ICreatePostFormState, IPost } from '../../interfaces';
-import { createPostAsyncAction, getUserPostsAsyncAction, selectPosts } from '../../store/features/posts/postsSlice';
-import { isIterationStatement } from 'typescript';
+import { createPostAsyncAction, getUserPostsAsyncAction, selectPosts,deletePostAsyncAction } from '../../store/features/posts/postsSlice';
 
 
 export const User = () => {
-   const user = useAppSelector(selectUser);
-   const { userPosts } = useAppSelector(selectPosts);
+   const { userData, status } = useAppSelector(selectUser);
+   const { userPosts, posts } = useAppSelector(selectPosts);
 
    const dispatch = useAppDispatch();
-   const { userData, status } = user;
 
    const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreatePostFormState>();
    const onSubmit = (formData: ICreatePostFormState) => {
       const { title, description } = formData;
-      console.log('CREATE POST FORM', formData, userData.id);
-      dispatch(createPostAsyncAction({owner: userData.id, title, description}))
+      dispatch(createPostAsyncAction({owner: userData?.id, title, description}))
       reset();
    }
 
+   const handleDelete = (id: string) => {
+      dispatch(deletePostAsyncAction(id))
+   }
+
+   const handleUpdate = (id: string) => {
+      console.log('handleUpdate',id);  
+   }
+
+   const RenderPosts = (): JSX.Element => {
+      return userPosts.map((item: IPost) => {
+         return <PostItem post={item} key={item._id} handleUpdate={handleUpdate} handleDelete={handleDelete}/>
+      })
+   }
+
    useEffect(() => {
-      dispatch(getUserPostsAsyncAction(userData.id))
-   }, [dispatch, userData.id])
+      dispatch(getUserPostsAsyncAction(userData!.id))
+   }, [dispatch, userData?.id, posts, userData])
 
    if(status === 'loading') {
       return (
@@ -61,9 +72,7 @@ export const User = () => {
          </form>
       </div>
       <Grid container>
-         {userPosts.map((item: IPost) => {
-            return <PostItem post={item} key={item._id}/>
-         })}
+         {userPosts.length === 0 ? <div>PISTO</div> : <RenderPosts/>}
       </Grid>
    </div>;
 };
