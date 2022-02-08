@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { selectUser } from '../../store/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { CircularProgress, Box, Button, Grid } from '@mui/material/';
@@ -26,15 +26,7 @@ export const User = () => {
       dispatch(deletePostAsyncAction(id))
    }
 
-   const handleUpdate = (id: string) => {
-      console.log('handleUpdate',id);  
-   }
 
-   const RenderPosts = (): JSX.Element => {
-      return userPosts.map((item: IPost) => {
-         return <PostItem post={item} key={item._id} handleUpdate={handleUpdate} handleDelete={handleDelete}/>
-      })
-   }
 
    useEffect(() => {
       dispatch(getUserPostsAsyncAction(userData!.id))
@@ -72,7 +64,21 @@ export const User = () => {
          </form>
       </div>
       <Grid container>
-         {userPosts.length === 0 ? <div>PISTO</div> : <RenderPosts/>}
+         {userPosts.length === 0 ? 
+            (
+               <div>No Data</div>
+            ) : (
+               <>
+                  {userPosts.map((item: IPost) => {
+                     return <PostItem 
+                        post={item} 
+                        key={item._id} 
+                        handleDelete={handleDelete}
+                     />
+                  })}
+               </> 
+            )
+         }
       </Grid>
    </div>;
 };

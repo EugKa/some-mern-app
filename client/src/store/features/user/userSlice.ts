@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../..';
 import { ICreateUserFormState, AuthResponse, IUser } from '../../../interfaces';
@@ -33,7 +33,7 @@ export const loginAsyncAction = createAsyncThunk(
       return response.data.user;
     } catch (e:any) { 
       return rejectWithValue(e.response.data.message)
-      }  
+    }  
   }
 );
 
@@ -87,7 +87,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    
+    changeError(state, action: PayloadAction<null>) {
+      state.error = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -139,20 +141,19 @@ export const userSlice = createSlice({
       })
       .addCase(checkAuthAsyncAction.fulfilled, (state, action) => {
         state.status = 'success';
-        state.userData = action.payload
-        state.isAuth = true
-        state.error = null
+        state.userData = action.payload;
+        state.isAuth = true;
+        state.error = null;
       })
       .addCase(checkAuthAsyncAction.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload
+        state.error = action.payload;
       })
   },
 });
 
-
+export const { changeError } = userSlice.actions
 export const selectUser = (state: RootState) => state.user;
-
 
 export default userSlice.reducer;
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AccountHeader, CustomInput, MyAllert } from '../../components';
-import { Box, Button, CircularProgress } from '@mui/material';
+import { Button } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import styles from './index.module.scss'
 import { ICreateUserFormState } from '../../interfaces';
@@ -13,9 +13,9 @@ export const Account = () => {
   let navigate = useNavigate();
   let location = useLocation();
   let pageName = location.pathname.split('/')[2];
-
+  
   const dispatch = useAppDispatch();
-  const {isAuth, error} = useAppSelector(selectUser);
+  const {isAuth, error } = useAppSelector(selectUser);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreateUserFormState>();
 
@@ -40,14 +40,10 @@ export const Account = () => {
     }
   },[isAuth, navigate, reset]);
 
-  
   return <div className={styles.AccountPage}>
-    {error ? (
-      <MyAllert severity='error'>
+      <MyAllert severity='error' open={!!error}>
         {error}
-      </MyAllert>
-    ) : null}
-    
+      </MyAllert>   
     <div className={styles.AccountPageWrapper}>
       <AccountHeader route={pageName}/>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +61,11 @@ export const Account = () => {
             id="email"
             className={styles.formInut}
             label="Email"
-            {...register('email', { required: { value: true, message: 'Pleace enter email'}})} 
+            {...register('email', { required: { value: true, message: 'Pleace enter email'}, 
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "invalid email address"
+            }})} 
             error={errors.email}
           />
           <CustomInput

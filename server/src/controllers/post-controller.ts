@@ -47,6 +47,17 @@ class PostController {
          next(e);
       }
    }
+
+   async updatePost(req:Request, res: Response, next: NextFunction) {
+      try {
+         const { id } = req.params;
+         const { title, description } = req.body;
+         const post = await PostService.updatePost(id, title, description);
+         return res.json(post);
+      } catch (e) {
+         next(e);
+      }
+   }
 }
 
 export default new PostController();

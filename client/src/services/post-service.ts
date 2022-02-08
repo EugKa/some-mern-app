@@ -18,3 +18,6 @@ export async function deletePostService(id: string): Promise<AxiosResponse<IPost
    return api.delete<IPost['_id']>(`/post/delete/${id}`)
 }
 
+export async function updatePostService(id: string, title: string, description: string): Promise<AxiosResponse<IPost[]>> {
+   return api.patch<IPost[]>(`/post/update/${id}`, { title, description })
+}

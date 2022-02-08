@@ -9,7 +9,7 @@ routes.post('/create', authMiddleware, postController.create);
 routes.get('/getAll', postController.getAll);
 routes.get('/getUserPosts/:id',authMiddleware, postController.getUserPosts);
 routes.delete('/delete/:id', authMiddleware, postController.deletePost);
-routes.put('/update/:id', authMiddleware);
+routes.patch('/update/:id', authMiddleware, postController.updatePost);
 
 
 export default routes
