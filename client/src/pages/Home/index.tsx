@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { getAllPostsAsyncAction, selectPosts } from '../../store/features/posts/postsSlice';
+import { getAllBookAnnouncementsAsyncAction, selectbookAnnouncements, selectUser } from '../../store/features';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { CircularProgress, Box, Grid } from '@mui/material/';
-import { IPost } from '../../interfaces';
-import { PostItem } from '../../components';
+import { IBook } from '../../interfaces';
+import { BookPreviewItem, MyAllert } from '../../components';
 
 export const Home = () => {
   const dispatch = useAppDispatch();
-  const { posts, status } = useAppSelector(selectPosts);
+  const { bookAnnouncements, status } = useAppSelector(selectbookAnnouncements);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
-    dispatch(getAllPostsAsyncAction())
+    dispatch(getAllBookAnnouncementsAsyncAction())
   },[dispatch])
 
   if(status === 'loading') {
@@ -21,7 +22,15 @@ export const Home = () => {
     )
   }
 
-  if(posts.length === 0) {
+  if(user.status === 'failed') {
+    return (
+      <MyAllert severity='error' open> 
+        Something went wrong please try again
+      </MyAllert> 
+    )
+  }
+
+  if(bookAnnouncements.length === 0) {
     return (
       <div>No Data</div>
     )
@@ -29,8 +38,8 @@ export const Home = () => {
 
   return (
     <Grid container>          
-      {posts.map((item: IPost) => {
-        return <PostItem key={item._id} post={item}/>
+      {bookAnnouncements.map((item: IBook) => {
+        return <BookPreviewItem key={item._id} book={item}/>
       })}                            
     </Grid>
   )

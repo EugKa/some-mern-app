@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import tokenService from '../service/token-service';
+import tokenService from '../token/service';
 import { ApiError } from '../excentions/api-error';
 import { JWTPayload } from '../interface';
 

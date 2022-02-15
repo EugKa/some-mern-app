@@ -1,36 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { selectUser } from '../../store/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { CircularProgress, Box, Button, Grid } from '@mui/material/';
+import { CircularProgress, Box, Grid, Divider } from '@mui/material/';
 import styles from './index.module.scss'
-import { CustomInput, PostItem, UserInfo } from '../../components';
-import { useForm } from 'react-hook-form';
-import { ICreatePostFormState, IPost } from '../../interfaces';
-import { createPostAsyncAction, getUserPostsAsyncAction, selectPosts,deletePostAsyncAction } from '../../store/features/posts/postsSlice';
-
+import { BookUser, CreateAnnouncementForm, UserInfo } from '../../components';
+import { IBook } from '../../interfaces';
+import { 
+   deleteBookAnnouncementAsyncAction, 
+   selectbookAnnouncements,
+   getUserBookAnnouncementsAsyncAction
+} from '../../store/features';
 
 export const User = () => {
    const { userData, status } = useAppSelector(selectUser);
-   const { userPosts, posts } = useAppSelector(selectPosts);
-
+   const { userBookAnnouncements, bookAnnouncements } = useAppSelector(selectbookAnnouncements);
    const dispatch = useAppDispatch();
 
-   const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreatePostFormState>();
-   const onSubmit = (formData: ICreatePostFormState) => {
-      const { title, description } = formData;
-      dispatch(createPostAsyncAction({owner: userData?.id, title, description}))
-      reset();
-   }
 
    const handleDelete = (id: string) => {
-      dispatch(deletePostAsyncAction(id))
+      dispatch(deleteBookAnnouncementAsyncAction(id))
    }
-
 
 
    useEffect(() => {
-      dispatch(getUserPostsAsyncAction(userData!.id))
-   }, [dispatch, userData?.id, posts, userData])
+      dispatch(getUserBookAnnouncementsAsyncAction(userData!.id))
+   }, [dispatch, userData?.id, bookAnnouncements, userData])
 
    if(status === 'loading') {
       return (
@@ -42,36 +36,20 @@ export const User = () => {
 
    return <div className={styles.userPage}>
       <UserInfo/>
-      <div className={styles.card}>
-         <form onSubmit={handleSubmit(onSubmit)}>
-         <div className={styles.formWrapper}>
-            <CustomInput
-               className={styles.formInut}
-               label="Title"
-               {...register('title', { required: { value: true, message: 'Pleace enter title'}, minLength: 6, maxLength: 32})} 
-               error={errors.title}
-            />
-            <CustomInput
-               className={styles.formInut}
-               label="Description"
-               {...register('description', { required: { value: true, message: 'Pleace enter description'}, minLength: 6, maxLength: 32})} 
-               error={errors.description}
-            />
-            <Button variant="contained" color="primary" type="submit" className={styles.formInut}>
-               Create post
-            </Button>
-         </div>
-         </form>
-      </div>
+      <CreateAnnouncementForm/>
+      <Divider variant="fullWidth" className={styles.divider}/>
       <Grid container>
-         {userPosts.length === 0 ? 
+         <Grid item lg={12} md={12} sm={12} xs={12}>
+            <h1 className={styles.announcementsTitile}>Your Book Announcements</h1>
+         </Grid>
+         {userBookAnnouncements.length === 0 ? 
             (
                <div>No Data</div>
             ) : (
                <>
-                  {userPosts.map((item: IPost) => {
-                     return <PostItem 
-                        post={item} 
+                  {userBookAnnouncements.map((item: IBook) => {
+                     return <BookUser 
+                        book={item} 
                         key={item._id} 
                         handleDelete={handleDelete}
                      />

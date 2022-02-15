@@ -1,12 +1,11 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material/';
-import { selectUser } from '../../store/features/user/userSlice';
 import { useAppSelector } from '../../store/hooks';
-import { selectPosts } from '../../store/features/posts/postsSlice';
+import { selectbookAnnouncements, selectUser } from '../../store/features';
 
 export const UserInfo = () => {
    const { userData } = useAppSelector(selectUser);
-   const { userPosts } = useAppSelector(selectPosts);
+   const { userBookAnnouncements } = useAppSelector(selectbookAnnouncements);
    return (
       <Card>
          <CardContent>
@@ -20,7 +19,7 @@ export const UserInfo = () => {
                Account: {userData?.isActivated ? "Activated" : "Please check your email"}
             </Typography>
             <Typography variant="body2">
-               Posts count: {userPosts.length}
+               Posts count: {userBookAnnouncements.length}
             </Typography>
             old title1 old description1
          </CardContent>

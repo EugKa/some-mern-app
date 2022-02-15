@@ -3,8 +3,3 @@ export interface ICreateUserFormState {
   email: string;
   password: string;
 }
-
-export interface ICreatePostFormState {
-  title: string;
-  description: string;
-}

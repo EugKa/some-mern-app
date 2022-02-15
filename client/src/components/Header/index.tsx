@@ -31,7 +31,7 @@ export const Header = () => {
         )}
         <NavLink to='/create' className={styles.link}>
             <h3 className={styles.htag}>
-              Create post
+              Create book announcement
             </h3> 
         </NavLink>
       </div>
