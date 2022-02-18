@@ -1,40 +1,36 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
-import { logoutAsyncAction, selectUser } from '../../store/features/user/userSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import styles from './index.module.scss'
+
+import { Toolbar, AppBar, Button, Container} from '@mui/material';
+import { LinksBar, UserBar, SearchBar } from './components'
+
+import { useAppSelector } from '../../store/hooks';
+import {  selectUser } from '../../store/features';
+import { useNavigate } from 'react-router-dom';
 
 export const Header = () => {
-  const user = useAppSelector(selectUser);
-  const dispatch = useAppDispatch()
+  const { isAuth } = useAppSelector(selectUser);
+  let navigate = useNavigate();
 
   return (
-    <header className={styles.header}>
-      <div className={styles.wrapper}>
-        <NavLink to='/' className={styles.link}>
-            <h3 className={styles.htag}>
-              Home
-            </h3> 
-        </NavLink>
-        {user.isAuth ? (
-          <button onClick={() => dispatch(logoutAsyncAction())} className={styles.btn}>
-            <h3>
-              Log out
-            </h3> 
-          </button>
-          ) : (
-            <NavLink to='/account/login' className={styles.link}>
-              <h3 className={styles.htag}>
-                Log in
-              </h3> 
-            </NavLink>
-        )}
-        <NavLink to='/create' className={styles.link}>
-            <h3 className={styles.htag}>
-              Create book announcement
-            </h3> 
-        </NavLink>
-      </div>
-    </header>
-)
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <LinksBar/>
+          <SearchBar/>
+          {isAuth ? (
+              <UserBar/>
+            ) : (
+              <Button
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  onClick={() => navigate('/account/login')}
+                >
+                  Login
+              </Button>
+            )
+          }   
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 };
+

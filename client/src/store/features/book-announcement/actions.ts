@@ -4,7 +4,8 @@ import {
   getAllBookAnnouncementsService, 
   getUserBookAnnouncementsService, 
   deleteBookAnnouncementService, 
-  updateBookAnnouncementService 
+  updateBookAnnouncementService,
+  searchBookAnnouncementService
 } from '../../../services';
 
 
@@ -14,7 +15,6 @@ export const createBookAnnouncementAsyncAction = createAsyncThunk(
    try {
      const { saler, author, title, description, type, tags, price } = bookAnnouncement;
      const response = await createBookAnnouncementService(saler, author, title, description, type, tags, price)
-     console.log('CR-POST RES ', response);
      return response.data;
    } catch (e:any) { 
      return rejectWithValue(e.response.data)
@@ -27,7 +27,6 @@ export const getAllBookAnnouncementsAsyncAction = createAsyncThunk(
   async (_, { rejectWithValue }) => {
    try {
     const response = await getAllBookAnnouncementsService()
-    console.log('GET-ALL-POST RES', response);
     return response.data;
    } catch (e:any) { 
     return rejectWithValue(e.response.data)
@@ -41,7 +40,6 @@ export const getUserBookAnnouncementsAsyncAction = createAsyncThunk(
   async (saler: string, { rejectWithValue }) => {
    try {
     const response = await getUserBookAnnouncementsService(saler)
-    console.log('getUserPostsAsyncAction', response);
     return response.data;
    } catch (e:any) { 
     return rejectWithValue(e.response.data)
@@ -66,7 +64,6 @@ export const updateBookAnnouncementAsyncAction = createAsyncThunk(
   async (bookAnnouncement: { id: string, title: string, description: string, price: number }, { rejectWithValue }) => {
    const { id, title, description, price } = bookAnnouncement;
    try {
-    console.log('post', bookAnnouncement)
     const response = await updateBookAnnouncementService(id, title, description, price)
     return response.data;
    } catch (e:any) { 
@@ -75,3 +72,14 @@ export const updateBookAnnouncementAsyncAction = createAsyncThunk(
   }
 );
  
+export const searchBookAnnouncementsAsyncAction = createAsyncThunk(
+  'book-announcement/searchBookAnnouncementsAsyncAction',
+  async (value: string, { rejectWithValue }) => {
+   try {
+    const response = await searchBookAnnouncementService(value)
+    return response.data;
+   } catch (e:any) { 
+    return rejectWithValue(e.response.data)
+   }   
+  }
+);

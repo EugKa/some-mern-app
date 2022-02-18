@@ -26,9 +26,6 @@ export const loginAsyncAction = createAsyncThunk(
     try {
       const { email, password } = user
       const response = await authLogIn(email, password);
-      console.log('loginAsyncActionRES',response);
-      
-      console.log('loginAsyncAction', response);
       localStorage.setItem('token', response.data.accessToken)
       return response.data.user;
     } catch (e:any) { 
@@ -43,11 +40,9 @@ export const registrAsyncAction = createAsyncThunk(
     try {
       const { userName, email, password } = user
       const response = await authRegistration(userName!, email, password);
-      console.log('registrAsyncAction', response);
       localStorage.setItem('token', response.data.accessToken)
       return response.data.user;
     } catch (e: any) {
-      console.log(e);
       return rejectWithValue(e.response.data.message)
     }  
   }
@@ -61,7 +56,6 @@ export const logoutAsyncAction = createAsyncThunk(
       localStorage.removeItem('token')
       return null;
     } catch (e:any) {
-      console.log(e); 
       return rejectWithValue(e.response.data)
     }  
   }
@@ -72,11 +66,9 @@ export const checkAuthAsyncAction = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<AuthResponse>(`${process.env.REACT_APP_API_URL}/user/refresh`, { withCredentials: true });
-      console.log('checkAuthAsyncAction', response);
       localStorage.setItem('token', response.data.accessToken)
       return response.data.user;
     } catch (e:any) {
-      console.log(e);
       return rejectWithValue(e.response.data)
     }  
   }

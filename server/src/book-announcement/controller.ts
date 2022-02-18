@@ -41,7 +41,6 @@ class BookAnnouncementController {
       try {
          const { id } = req.params;
          const post = await BookAnnouncementService.deleteBookAnnouncement(id);
-         console.log('DELETE-CONTROLLER-POST', id);
          return res.json(post);
       } catch (e) {
          next(e);
@@ -53,6 +52,15 @@ class BookAnnouncementController {
          const { id } = req.params;
          const { title, description, price } = req.body;
          const post = await BookAnnouncementService.updateBookAnnouncement(id, title, description, price);
+         return res.json(post);
+      } catch (e) {
+         next(e);
+      }
+   }
+   async searchBookAnnouncement(req:Request, res: Response, next: NextFunction) {
+      try {
+         const { value } = req.body;
+         const post = await BookAnnouncementService.searchBookAnnouncement(value);
          return res.json(post);
       } catch (e) {
          next(e);

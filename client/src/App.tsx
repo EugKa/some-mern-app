@@ -4,8 +4,8 @@ import {
   Route
 } from "react-router-dom";
 import { Header, RequireAuth } from './components';
-import { Home, Account, User } from './pages';
-import { checkAuthAsyncAction } from './store/features/user/userSlice';
+import { Home, Account, CreatePage } from './pages';
+import { checkAuthAsyncAction } from './store/features';
 import { useAppDispatch } from './store/hooks';
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
       dispatch(checkAuthAsyncAction())
     }
   },[dispatch])
+
   return (
     <div className="App">
       <Header/>
@@ -27,7 +28,7 @@ function App() {
             path="/create"
             element={
               <RequireAuth>
-                <User />
+                <CreatePage />
               </RequireAuth>
             }
           />

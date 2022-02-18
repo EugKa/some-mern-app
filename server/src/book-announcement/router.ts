@@ -10,6 +10,8 @@ routes.get('/getAll', BookAnnouncementController.getAll);
 routes.get('/getUserBooksAnnouncements/:id',authMiddleware, BookAnnouncementController.getUserBooksAnnouncements);
 routes.delete('/delete/:id', authMiddleware, BookAnnouncementController.deleteBookAnnouncement);
 routes.patch('/update/:id', authMiddleware, BookAnnouncementController.updateBookAnnouncement);
+routes.post('/search', BookAnnouncementController.searchBookAnnouncement);
+
 
 
 export default routes

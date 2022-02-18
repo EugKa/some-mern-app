@@ -6,10 +6,11 @@ import {
   getAllBookAnnouncementsAsyncAction, 
   getUserBookAnnouncementsAsyncAction, 
   deleteBookAnnouncementAsyncAction, 
-  updateBookAnnouncementAsyncAction 
+  updateBookAnnouncementAsyncAction,
+  searchBookAnnouncementsAsyncAction
 } from './actions';
 
-export interface PostState {
+export interface BookAnnouncementState {
   bookAnnouncements: IBook[];
   userBookAnnouncements: IBook[];
   status: 'idle' | 'loading' | 'success' | 'failed';
@@ -17,7 +18,7 @@ export interface PostState {
 
 }
 
-const initialState: PostState = {
+const initialState: BookAnnouncementState = {
   status: 'idle',
   bookAnnouncements: [],
   userBookAnnouncements: [],
@@ -85,7 +86,6 @@ export const bookAnnouncementSlice = createSlice({
         state.error = action.payload;
       })
 
-
       .addCase(updateBookAnnouncementAsyncAction.pending, (state) => {
         state.status = 'loading';
       })
@@ -95,6 +95,19 @@ export const bookAnnouncementSlice = createSlice({
         state.error = null;
       })
       .addCase(updateBookAnnouncementAsyncAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
+      .addCase(searchBookAnnouncementsAsyncAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(searchBookAnnouncementsAsyncAction.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.bookAnnouncements = action.payload;
+        state.error = null;
+      })
+      .addCase(searchBookAnnouncementsAsyncAction.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })

@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import tokenService from '../token/service';
 import { ApiError } from '../excentions/api-error';
-import { JWTPayload } from '../interface';
+import { JWTPayload } from '../token';
 
 interface RequestWithUser extends Request {
    user: JWTPayload

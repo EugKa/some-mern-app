@@ -2,6 +2,7 @@ import { pipeline } from "stream";
 import { ApiError } from "../excentions/api-error";
 import { userModel } from "../user";
 import { bookAnnoncemenModel } from "./model";
+import { lookUpUnwindAddFieldsProjectPipeline } from "./pipeline-stages";
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -32,57 +33,15 @@ class BookAnnouncementService {
       return announcement
    }
    async getAll() {
-      const announcement = await bookAnnoncemenModel.aggregate([{ 
-         $lookup: {
-            from: 'users',
-            localField: 'saler',
-            foreignField: '_id',
-            as: 'trr'
-         }},
-         { 
-            $unwind: '$trr'
-         },
-         {
-         $addFields: {
-            "saler": "$trr.userName",
-         }
-         },
-         {
-            $project: {
-               trr: 0
-            }
-         }
-      ]);
+      const announcement = await bookAnnoncemenModel.aggregate(lookUpUnwindAddFieldsProjectPipeline);
       return announcement
    }
 
    async getUserBooksAnnouncements(saler: string) {
-      // const announcement = await bookAnnoncemenModel.find({ saler })
       const announcement = await bookAnnoncemenModel.aggregate([ 
          { $match: { saler: new ObjectId(saler)}},
-         { 
-            $lookup: {
-               from: 'users',
-               localField: 'saler',
-               foreignField: '_id',
-               as: 'trr'
-            }
-         },
-         { 
-            $unwind: '$trr'
-         },
-         {
-            $addFields: {
-               "saler": "$trr.userName",
-            }
-         },
-         {
-            $project: {
-               trr: 0
-            }
-         }
+         ...lookUpUnwindAddFieldsProjectPipeline
       ]);
-      
       return announcement
    }
 
@@ -105,6 +64,22 @@ class BookAnnouncementService {
       }
       const allPost = await bookAnnoncemenModel.find()
       return allPost
+   }
+
+   async searchBookAnnouncement(value: string) {      
+      
+      const announcements = await bookAnnoncemenModel.aggregate([
+         {
+            $search: {
+               "index": 'searchByAuthorTitleDescrIndex',
+               "text": {
+                  "query": value,
+                  "path": ["author", "title", "description"]
+               }
+            }
+         }
+      ])
+      return announcements
    }
 
 }

@@ -21,7 +21,6 @@ export const Account = () => {
 
   const onSubmit = (formData: ICreateUserFormState) => {
     const { userName, email, password } = formData;
-    console.log('formData', formData);
     if(pageName === 'registration') {
       dispatch(registrAsyncAction({userName, email, password}))
     } else {
@@ -35,7 +34,6 @@ export const Account = () => {
       return navigate("/create");
     }
     return () => {
-      console.log('inssd');
       reset()
     }
   },[isAuth, navigate, reset]);

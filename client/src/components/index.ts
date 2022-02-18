@@ -5,6 +5,7 @@ export * from './PrivateRoute'
 export * from './UserInfo'
 export * from './Alert'
 export * from './BookPreview'
-export * from './CreateAnnouncementForm'
+export * from './CreateBookAnnouncementForm'
 export * from './BookUser'
+export * from './BookAnnouncementsList'
 

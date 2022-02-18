@@ -37,3 +37,7 @@ export async function deleteBookAnnouncementService(id: string): Promise<AxiosRe
 export async function updateBookAnnouncementService(id: string, title: string, description: string, price: number): Promise<AxiosResponse<IBook[]>> {
    return api.patch<IBook[]>(`/book/update/${id}`, { title, description, price })
 }
+
+export async function searchBookAnnouncementService(value: string): Promise<AxiosResponse<IBook[]>> {
+   return api.post<IBook[]>(`/book/search`, { value })
+}

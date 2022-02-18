@@ -3,11 +3,11 @@ import { selectUser, createBookAnnouncementAsyncAction } from '../../store/featu
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { Grid, Button, Select, InputLabel, MenuItem, FormControl } from '@mui/material/';
 import styles from './index.module.scss'
-import { CustomInput } from '../../components';
+import { CustomInput } from '..';
 import { useForm } from 'react-hook-form';
 import { BookTypesEnum } from '../../interfaces';
 
-interface CreateAnnouncementFormState {
+interface CreateBookAnnouncementFormState {
    author: string;
    title: string;
    description: string;
@@ -74,14 +74,13 @@ export const genreArr = [
 ]
 
 
-export const CreateAnnouncementForm = () => {
+export const CreateBookAnnouncementForm = () => {
    const { userData } = useAppSelector(selectUser);
    const dispatch = useAppDispatch();
-   const { register, handleSubmit, formState, reset } = useForm<CreateAnnouncementFormState>();
+   const { register, handleSubmit, formState, reset } = useForm<CreateBookAnnouncementFormState>();
    
-   const onSubmit = (formData: CreateAnnouncementFormState) => {
+   const onSubmit = (formData: CreateBookAnnouncementFormState) => {
       const { author, title, description, type, tags, price } = formData;
-      console.log('formData', formData, userData?.id)
       
       dispatch(createBookAnnouncementAsyncAction({
          saler: userData?.id,

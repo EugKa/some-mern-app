@@ -11,8 +11,10 @@ export const Home = () => {
   const user = useAppSelector(selectUser);
 
   useEffect(() => {
-    dispatch(getAllBookAnnouncementsAsyncAction())
-  },[dispatch])
+    if(status === 'idle') {
+      dispatch(getAllBookAnnouncementsAsyncAction())
+    }
+  },[dispatch, status])
 
   if(status === 'loading') {
     return (

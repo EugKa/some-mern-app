@@ -24,8 +24,8 @@ export const BookUser = ({ book, handleDelete }: BookUserProps) => {
    const bookPrice = useInput<number>(price);
    const dispatch = useAppDispatch();
 
-   const isEqualTitle = bookTitle.value.toString() !== title.toString();
-   const isEqualDescription = bookDescr.value.toString() !== description.toString();
+   const isEqualTitle = bookTitle.value !== title;
+   const isEqualDescription = bookDescr.value!== description;
    const isEqualPrice = bookPrice.value.toString() !== price.toString();
    
    const handleEdit = () => {
